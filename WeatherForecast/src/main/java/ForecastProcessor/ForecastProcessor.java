@@ -8,9 +8,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ForecastProcessor {
+public class ForecastProcessor implements ForecastInterface{
 
-
+    @Override
     public ArrayList<String> getCurrentWeatherInArrayList(String city) throws IOException, JSONException {
             ArrayList<String> content = new ArrayList<>();
             ResponseWriter responseWriter = new ResponseWriter();
@@ -29,7 +29,7 @@ public class ForecastProcessor {
         return content;
     }
 
-
+    @Override
     public ArrayList<Double> getLatLonOfCityFromUrlResponseInArrayList(JSONObject dataAsJSONObject, ResponseWriter responseWriter) throws JSONException {
         Double lat = responseWriter.getLatitude(dataAsJSONObject);
         Double lon = responseWriter.getLongitude(dataAsJSONObject);
