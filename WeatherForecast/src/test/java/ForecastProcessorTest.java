@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -44,6 +45,11 @@ public class ForecastProcessorTest {
         assertEquals(response, testresponse);
     }
 
+    @Test
+    public void doesCreateHashMapOfThreeDayForecastReturnHashMap() throws IOException, JSONException {
+        ForecastProcessor forecastProcessor = new ForecastProcessor();
+        assertEquals(forecastProcessor.createHashMapOfThreeDayForecast(jsonObject, responseWriter).getClass(), HashMap.class);
+    }
     @Test
     public void doesGetCurrentWeatherInArrayListReturnArrayList() throws IOException, JSONException {
         ArrayList<String> response = forecastProcessor.getCurrentWeatherInArrayList(city);
