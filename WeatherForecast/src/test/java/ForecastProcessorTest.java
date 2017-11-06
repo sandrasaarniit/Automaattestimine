@@ -50,6 +50,14 @@ public class ForecastProcessorTest {
         ForecastProcessor forecastProcessor = new ForecastProcessor();
         assertEquals(forecastProcessor.createHashMapOfThreeDayForecast(jsonObject, responseWriter).getClass(), HashMap.class);
     }
+
+    @Test
+    public void doesHashMapReturnCorrectNrOfForecasts() throws Exception {
+        HashMap<String, Object> createHashMapOfThreeDayForecast = forecastProcessor.createHashMapOfThreeDayForecast(jsonObject, responseWriter);
+        int numberOfForecasts = createHashMapOfThreeDayForecast.size();
+        assertEquals(3, numberOfForecasts);
+    }
+
     @Test
     public void doesGetCurrentWeatherInArrayListReturnArrayList() throws IOException, JSONException {
         ArrayList<String> response = forecastProcessor.getCurrentWeatherInArrayList(city);
