@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ForecastProcessor implements ForecastInterface{
 
@@ -42,6 +43,35 @@ public class ForecastProcessor implements ForecastInterface{
         HashMap<String, Object> threeDaysWithTheirMinAndMaxTemperatures = new HashMap<>();
         ArrayList<Double> minAndMaxTemperatures = new ArrayList<>();
 
+        for(int i=0; i < dataInJsonArray.length(); i++) {
+            if (!Objects.equals(responseWriter.getDateInText(dataInJsonArray, i), responseWriter.getDateInText(dataInJsonArray, 0)) &&
+                    (!dataInJsonArray.isNull(i + 1) && (Objects.equals(responseWriter.getDateInText(dataInJsonArray, i),
+                            responseWriter.getDateInText(dataInJsonArray,i+1)))) ){
+                if (responseWriter.getMaxTemp(dataInJsonArray, i) > maxTemperature) {
+                    maxTemperature = responseWriter.getMaxTemp(dataInJsonArray, i);
+                }
+                if (responseWriter.getMinTemp(dataInJsonArray, i) < minTemperature) {
+                    minTemperature = responseWriter.getMinTemp(dataInJsonArray, i);
+                }
+            } else if (!Objects.equals(responseWriter.getDateInText(dataInJsonArray, i), responseWriter.getDateInText(dataInJsonArray, 0)) &&
+                    (dataInJsonArray.isNull(i + 1) || (!Objects.equals(responseWriter.getDateInText(dataInJsonArray, i),
+                            responseWriter.getDateInText(dataInJsonArray,i+1))))) {
+                if (responseWriter.getMaxTemp(dataInJsonArray, i) > maxTemperature) {
+                    maxTemperature = responseWriter.getMaxTemp(dataInJsonArray, i);
+                }
+                if (responseWriter.getMinTemp(dataInJsonArray, i) < minTemperature) {
+                    minTemperature = responseWriter.getMinTemp(dataInJsonArray, i);
+                }
+                minAndMaxTemperatures.add(maxTemperature);
+                minAndMaxTemperatures.add(minTemperature);
+                if (threeDaysWithTheirMinAndMaxTemperatures.size() < 3) {
+                    threeDaysWithTheirMinAndMaxTemperatures.put( responseWriter.getDateInText(dataInJsonArray, i), minAndMaxTemperatures.clone());
+                }
+                minAndMaxTemperatures.clear();
+                maxTemperature = Integer.MAX_VALUE;
+                minTemperature = Integer.MIN_VALUE;
+            }
+        }
         return threeDaysWithTheirMinAndMaxTemperatures;
     }
 
