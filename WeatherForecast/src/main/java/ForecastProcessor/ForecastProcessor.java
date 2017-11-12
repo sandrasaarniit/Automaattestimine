@@ -28,7 +28,7 @@ public class ForecastProcessor implements ForecastInterface{
             Double mintemp = responseWriter.getMinTemp(forecastAsJSONArray, 0);
             String date = responseWriter.getDateInText(forecastAsJSONArray, 0);
             content.add("Latitude: " + lat.toString());
-            content.add("Logitude: " + lon.toString());
+            content.add("Longitude: " + lon.toString());
             content.add("Max temp: " + maxtemp.toString());
             content.add("Min temp: " + mintemp.toString());
             content.add("Date: " + date);
@@ -95,6 +95,7 @@ public class ForecastProcessor implements ForecastInterface{
         JSONObject jo = rw.makeStringToJSON(data);
         System.out.println(forecastProcessor.createHashMapOfThreeDayForecast(jo, rw));
         System.out.println(forecastProcessor.getLatLonOfCityFromUrlResponseInArrayList(jo, rw));
+        System.out.println(forecastProcessor.getCurrentWeatherInArrayList(city));
     }
 
 }
