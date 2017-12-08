@@ -1,5 +1,7 @@
 package ForecastProcessor;
 
+import InputOutput.FileProcessor;
+import InputOutput.UserInputProcessor;
 import Responses.ResponseWriter;
 import UrlBuilder.UrlBuilder;
 import org.json.JSONArray;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class ForecastProcessor implements ForecastInterface{
@@ -17,7 +20,9 @@ public class ForecastProcessor implements ForecastInterface{
     private static ForecastProcessor forecastProcessor = new ForecastProcessor();
 
     @Override
-    public ArrayList<String> getCurrentWeatherInArrayList(String city) throws IOException, JSONException {
+    public ArrayList<String> getCurrentWeatherInArrayList(List<String> cities) throws IOException, JSONException {
+        ArrayList<String> allCitiesData = new ArrayList<>();
+        for (String city : cities) {
             ArrayList<String> content = new ArrayList<>();
             ResponseWriter responseWriter = new ResponseWriter();
             JSONObject forecastAsJSONObject = responseWriter.getForecastDataJSONObject(city);
@@ -32,7 +37,9 @@ public class ForecastProcessor implements ForecastInterface{
             content.add("Max temp: " + maxtemp.toString());
             content.add("Min temp: " + mintemp.toString());
             content.add("Date: " + date);
-        return content;
+            allCitiesData.add(city + ": " + content.toString() + System.lineSeparator());
+        }
+        return allCitiesData;
     }
 
     @Override
@@ -86,6 +93,8 @@ public class ForecastProcessor implements ForecastInterface{
     }
 
     public static void main(String[] args) throws JSONException, IOException {
+        UserInputProcessor userInputProcessor = new UserInputProcessor();
+        FileProcessor fileProcessor = new FileProcessor();
         UrlBuilder urlBuilder = new UrlBuilder();
         String city = "Tallinn";
         String APPID = "9b228ef8a0793abbdea7b9849333ecbb";
@@ -95,7 +104,7 @@ public class ForecastProcessor implements ForecastInterface{
         JSONObject jo = rw.makeStringToJSON(data);
         System.out.println(forecastProcessor.createHashMapOfThreeDayForecast(jo, rw));
         System.out.println(forecastProcessor.getLatLonOfCityFromUrlResponseInArrayList(jo, rw));
-        System.out.println(forecastProcessor.getCurrentWeatherInArrayList(city));
+        System.out.println(forecastProcessor.getCurrentWeatherInArrayList(userInputProcessor.getUserInput(fileProcessor)));
     }
 
 }

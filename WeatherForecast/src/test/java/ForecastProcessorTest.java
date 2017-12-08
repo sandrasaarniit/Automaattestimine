@@ -1,4 +1,6 @@
 import ForecastProcessor.ForecastProcessor;
+import InputOutput.FileProcessor;
+import InputOutput.UserInputProcessor;
 import Responses.ResponseWriter;
 import UrlBuilder.UrlBuilder;
 import org.json.JSONException;
@@ -59,11 +61,12 @@ public class ForecastProcessorTest {
     }
 
     @Test
-    public void doesGetCurrentWeatherInArrayListReturnArrayList() throws IOException, JSONException {
-        ArrayList<String> response = forecastProcessor.getCurrentWeatherInArrayList(city);
+    public void doesgetCurrentWeatherInArrayListReturnArrayList() throws IOException, JSONException {
+        UserInputProcessor userInputProcessor = new UserInputProcessor();
+        FileProcessor fileProcessor = new FileProcessor();
+        ArrayList<String> response = forecastProcessor.getCurrentWeatherInArrayList(userInputProcessor.getUserInput(fileProcessor));
         assertThat(response, instanceOf(ArrayList.class));
     }
-
 
 
 }

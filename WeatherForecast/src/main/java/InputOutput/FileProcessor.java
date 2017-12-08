@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class FileProcessor {
@@ -23,8 +24,8 @@ public class FileProcessor {
         return new File("C:\\Users\\Sandra\\IdeaProjects\\Automaattestimine\\Weather\\WeatherForecast\\input_failid\\"+filenameWithExtension).toString();
     }
 
-    public String fileReader (String filePath) throws IOException {
-        return Files.readAllLines(Paths.get(filePath)).toString();
+    public List<String> fileReader (String filePath) throws IOException {
+        return Files.readAllLines(Paths.get(filePath));
     }
 
     public void fileWriter(ArrayList<String> currentWeather, ArrayList<String> forecast, String cityName ) throws IOException {
@@ -42,26 +43,31 @@ public class FileProcessor {
         fw.close();
     }
 
-    public void writeCityForecastToFile(String city, ResponseWriter responseWriter) throws IOException, JSONException {
+    public void writeCityForecastToFile(List<String> cities, ResponseWriter responseWriter) throws IOException, JSONException {
+        for (String city : cities) {
             JSONObject dataAsJSONObject = responseWriter.getForecastDataJSONObject(city);
             HashMap<String, Object> threeDays = forecastProcessor.createHashMapOfThreeDayForecast(dataAsJSONObject, responseWriter);
             ArrayList<Double> latAndLon = forecastProcessor.getLatLonOfCityFromUrlResponseInArrayList(dataAsJSONObject, responseWriter);
-            ArrayList<String> currentWeather = forecastProcessor.getCurrentWeatherInArrayList(city);
+            ArrayList<String> currentWeather = forecastProcessor.getCurrentWeatherInArrayList(cities);
             ArrayList<String> forecast = new ArrayList<>();
-            ArrayList<String> current = new ArrayList<>();
             forecast.add(threeDays.toString());
             forecast.add(latAndLon.toString());
-            current.add(currentWeather.toString());
-            fileProcessor.fileWriter(current, forecast, city);
+            ArrayList<String> current = new ArrayList<>();
+            for(String oneCity : currentWeather) {
+                if (oneCity.contains(city)) {
+                    current.add(oneCity);
+                }
+            }
+                fileProcessor.fileWriter(current, forecast, city);
+        }
     }
 
     public static void main(String[] args) throws IOException, JSONException {
         ResponseWriter responseWriter = new ResponseWriter();
         UserInputProcessor userInputProcessor = new UserInputProcessor();
-        userInputProcessor.useUserInput(fileProcessor,responseWriter);
+        userInputProcessor.useUserInput(fileProcessor, responseWriter);
 
     }
-
 
 
 }
