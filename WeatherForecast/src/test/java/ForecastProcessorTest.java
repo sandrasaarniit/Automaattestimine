@@ -23,7 +23,7 @@ public class ForecastProcessorTest {
     private String appId = "9b228ef8a0793abbdea7b9849333ecbb";
     private URL url = urlBuilder.buildNewForecastRequestURL(city, appId);
     private ResponseWriter responseWriter = new ResponseWriter();
-    private String data = responseWriter.getResponseBodyFromURL(url);
+    private String data = urlBuilder.getResponseBodyFromURL(url);
     private JSONObject jsonObject = responseWriter.makeStringToJSON(data);
     private ForecastProcessor forecastProcessor = new ForecastProcessor();
 

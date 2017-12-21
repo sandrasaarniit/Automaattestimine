@@ -1,3 +1,4 @@
+import InputOutput.UserInputProcessor;
 import UrlBuilder.UrlBuilder;
 import org.junit.Test;
 
@@ -7,6 +8,7 @@ import java.net.URL;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.spy;
 
 public class UrlBuilderTest {
 
@@ -26,8 +28,11 @@ public class UrlBuilderTest {
     }
     @Test
     public void doesBuildNewForecastURLReturnCorrectURL() throws Exception{
-        URL currentWeatherRequestURL = urlBuilder.buildNewForecastRequestURL(city, appId);
-        assertEquals(currentWeatherRequestURL, correctForecastURL);
+        UserInputProcessor userInputProcessor = spy(UserInputProcessor.class);
+        //TODO
+        URL realWeatherRequestURL = urlBuilder.buildNewForecastRequestURL(city, appId);
+
+        assertEquals(realWeatherRequestURL, correctForecastURL);
     }
 
 }

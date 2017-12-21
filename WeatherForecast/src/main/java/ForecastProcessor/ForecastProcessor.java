@@ -100,7 +100,7 @@ public class ForecastProcessor implements ForecastInterface{
         String APPID = "9b228ef8a0793abbdea7b9849333ecbb";
         URL url = urlBuilder.buildNewForecastRequestURL(city, APPID);
         ResponseWriter rw = new ResponseWriter();
-        String data = rw.getResponseBodyFromURL(url);
+        String data = urlBuilder.getResponseBodyFromURL(url);
         JSONObject jo = rw.makeStringToJSON(data);
         System.out.println(forecastProcessor.createHashMapOfThreeDayForecast(jo, rw));
         System.out.println(forecastProcessor.getLatLonOfCityFromUrlResponseInArrayList(jo, rw));

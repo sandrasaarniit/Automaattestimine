@@ -1,9 +1,6 @@
 package Responses;
 
 import UrlBuilder.UrlBuilder;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,14 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 
 public class ResponseWriter {
-    static OkHttpClient ok = new OkHttpClient();
 
-    public String getResponseBodyFromURL (URL url) throws IOException {
-        Request request = new Request.Builder().url(url).build();
-        try (Response response = ok.newCall(request).execute()) {
-            return response.body().string();
-        }
-    }
 
     public JSONObject makeStringToJSON (String dataAsString) throws JSONException {
         JSONObject jsonObject = new JSONObject(dataAsString);
@@ -35,7 +25,7 @@ public class ResponseWriter {
         String APPID = "9b228ef8a0793abbdea7b9849333ecbb";
         URL url = urlBuilder.buildNewForecastRequestURL(city, APPID);
         ResponseWriter rw = new ResponseWriter();
-        String data = rw.getResponseBodyFromURL(url);
+        String data = urlBuilder.getResponseBodyFromURL(url);
         rw.makeStringToJSON(data);
         JSONObject jsonObject = rw.makeStringToJSON(data);
         return jsonObject;
@@ -73,8 +63,7 @@ public class ResponseWriter {
         String APPID = "9b228ef8a0793abbdea7b9849333ecbb";
         URL url = urlBuilder.buildNewForecastRequestURL(city, APPID);
         System.out.println(url);
-        ResponseWriter rw = new ResponseWriter();
-        String data = rw.getResponseBodyFromURL(url);
+        String data = urlBuilder.getResponseBodyFromURL(url);
         System.out.println(data);
 
     }
